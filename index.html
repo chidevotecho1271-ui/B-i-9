@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bài 9 - Từ Vựng Minna no Nihongo (Đầy đủ 52 từ vựng)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', 'Noto Sans JP', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .jp-font {
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .speaker-icon {
+      transition: transform 0.15s ease;
+    }
+    .speaker-icon:hover {
+      transform: scale(1.2);
+    }
+    .speaker-icon:active {
+      transform: scale(0.9);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-3 md:p-6">
+
+  <div class="w-full max-w-xl">
+    <!-- Header Box -->
+    <div class="bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-200 mb-4 text-center">
+      <div class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-500 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+        <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+        HỖ TRỢ PHÁT ÂM CẢ 4 ĐÁP ÁN 🔊
+      </div>
+      <h1 class="text-xl md:text-2xl font-black text-slate-900">Bài 9 - Từ Vựng Minna no Nihongo</h1>
+      <p class="text-xs text-slate-500 mt-1">Đầy đủ chính xác 52 từ vựng trong file tài liệu</p>
+    </div>
+
+    <!-- Quiz Box -->
+    <div id="quiz-card" class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 flex flex-col justify-between min-h-[480px]">
+      <div>
+        <!-- Top Bar -->
+        <div class="flex justify-between items-center mb-3 text-sm font-extrabold">
+          <span id="question-index" class="text-rose-500 text-base">Câu 1 / 52</span>
+          <span class="bg-slate-100 px-3.5 py-1 rounded-full text-slate-700 font-bold text-xs" id="score-counter">Điểm: 0</span>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6">
+          <div id="progress-fill" class="bg-rose-500 h-full rounded-full transition-all duration-300" style="width: 2%;"></div>
+        </div>
+
+        <!-- Question -->
+        <h2 id="q-title" class="text-lg md:text-xl font-black text-slate-900 mb-6 leading-relaxed">
+          Đang tải câu hỏi...
+        </h2>
+
+        <!-- Options Container -->
+        <div id="answers-grid" class="space-y-3"></div>
+      </div>
+
+      <!-- Feedback & Action -->
+      <div class="mt-6 pt-4 border-t border-slate-100">
+        <div id="feedback-alert" class="hidden p-3.5 rounded-2xl text-sm font-semibold mb-3"></div>
+        <button id="btn-continue" class="hidden w-full bg-rose-500 hover:bg-rose-600 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-rose-200 transition-all text-center text-base">
+          Câu tiếp theo →
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-box" class="hidden bg-white rounded-3xl p-8 shadow-sm border border-slate-200 text-center">
+      <div class="w-20 h-20 bg-rose-50 text-rose-500 text-4xl rounded-3xl flex items-center justify-center mx-auto mb-4 font-black">
+        🎉
+      </div>
+      <h2 class="text-2xl font-black text-slate-900 mb-2">Hoàn Thành Bài Ôn Luyện!</h2>
+      <p class="text-slate-500 text-sm mb-6">Bạn đã làm xong tất cả 52 câu từ vựng của bài.</p>
+
+      <div class="bg-rose-50/70 border border-rose-100 rounded-3xl p-6 mb-6 max-w-xs mx-auto">
+        <div class="text-4xl font-black text-rose-600 mb-1" id="res-score">52 / 52</div>
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider" id="res-accuracy">Chính xác 100%</div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="startQuiz(false)" class="w-full sm:w-auto bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-2xl shadow-md shadow-rose-100 transition">
+          Làm lại từ đầu
+        </button>
+        <button onclick="startQuiz(true)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-2xl transition">
+          Trộn ngẫu nhiên câu hỏi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const data = [{"vn": "hiểu, nắm được", "jp": "わかります"}, {"vn": "có (sở hữu)", "jp": "あります"}, {"vn": "thích", "jp": "すき[な]"}, {"vn": "ghét, không thích", "jp": "きらい[な]"}, {"vn": "giỏi, khéo", "jp": "じょうず[な]"}, {"vn": "kém", "jp": "へた[な]"}, {"vn": "đồ uống", "jp": "のみもの"}, {"vn": "món ăn, việc nấu ăn (～を します：nấu ăn)", "jp": "りょうり"}, {"vn": "thể thao (～を します：chơi thể thao)", "jp": "スポーツ"}, {"vn": "bóng chày (～を します：chơi bóng chày)", "jp": "やきゅう"}, {"vn": "nhảy, khiêu vũ (～を します：khiêu vũ)", "jp": "ダンス"}, {"vn": "du lịch, chuyến du lịch (～[を] します：đi du lịch)", "jp": "りょこう"}, {"vn": "âm nhạc", "jp": "おんかく"}, {"vn": "bài hát", "jp": "うた"}, {"vn": "nhạc cổ điển", "jp": "クラシック"}, {"vn": "nhạc jazz", "jp": "ジャズ"}, {"vn": "buổi hòa nhạc", "jp": "コンサート"}, {"vn": "karaoke", "jp": "カラオケ"}, {"vn": "Kabuki (thể loại ca kịch truyền thống của Nhật)", "jp": "かぶき"}, {"vn": "tranh, hội họa", "jp": "え"}, {"vn": "chữ", "jp": "じ"}, {"vn": "chữ Hán", "jp": "かんじ"}, {"vn": "chữ Hiragana", "jp": "ひらがな"}, {"vn": "chữ Katakana", "jp": "かたかな"}, {"vn": "chữ La Mã", "jp": "ローマじ"}, {"vn": "tiền lẻ", "jp": "こまかい おかね"}, {"vn": "vé", "jp": "チケット"}, {"vn": "thời gian", "jp": "じかん"}, {"vn": "việc bận, công chuyện", "jp": "ようじ"}, {"vn": "cuộc hẹn, lời hứa (～[を] します：hứa, hẹn)", "jp": "やくそく"}, {"vn": "việc làm thêm (～を します：làm thêm)", "jp": "アルバイト"}, {"vn": "chồng (dùng khi nói về chồng người khác)", "jp": "ごしゅじん"}, {"vn": "chồng (dùng khi nói về chồng mình)", "jp": "おっと／しゅじん"}, {"vn": "vợ (dùng khi nói về vợ người khác)", "jp": "おくさん"}, {"vn": "vợ (dùng khi nói về vợ mình)", "jp": "つま／かない"}, {"vn": "con cái", "jp": "こども"}, {"vn": "tốt, rõ (chỉ mức độ)", "jp": "よく"}, {"vn": "đại khái, đại thể", "jp": "だいたい"}, {"vn": "nhiều", "jp": "たくさん"}, {"vn": "ít, một ít", "jp": "すこし"}, {"vn": "hoàn toàn ~ không (dùng với thể phủ định)", "jp": "ぜんぜん"}, {"vn": "sớm, nhanh", "jp": "はやく"}, {"vn": "vì ~", "jp": "～から"}, {"vn": "tại sao", "jp": "どうして"}, {"vn": "Hãy cho tôi mượn (nó).", "jp": "かして ください。"}, {"vn": "Được chứ./Được ạ.", "jp": "いいですよ。"}, {"vn": "Tôi xin lỗi, [nhưng... ]/Đáng tiếc là...", "jp": "ざんねんです[が]"}, {"vn": "Ah/Ôi", "jp": "ああ"}, {"vn": "Anh/Chị cùng ~ với tôi (chúng tôi) không?", "jp": "いっしょに いかがですか。"}, {"vn": "[~ thì] có lẽ không được rồi. (từ chối khéo lời mời)", "jp": "[～は] ちょっと……。"}, {"vn": "Không được à?", "jp": "だめですか。"}, {"vn": "Hẹn anh/chị lần sau vậy. (từ chối khéo không phật lòng)", "jp": "また こんど おねがいします。"}];
+
+    let questions = [];
+    let curIdx = 0;
+    let score = 0;
+    let answered = false;
+    let activeAudio = null;
+
+    function playNativeAudio(text) {
+      const cleanWord = text.replace(/[\[\]()（）～~?？/／]/g, '').trim();
+      const encoded = encodeURIComponent(cleanWord);
+
+      if (activeAudio) {
+        try {
+          activeAudio.pause();
+          activeAudio.currentTime = 0;
+        } catch(e) {}
+      }
+
+      const primaryUrl = `https://dict.youdao.com/dictvoice?audio=${encoded}&type=2&le=jap`;
+      const backupUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=ja&client=tw-ob`;
+
+      const audio = new Audio();
+      audio.src = primaryUrl;
+      audio.volume = 1.0;
+      activeAudio = audio;
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          const backupAudio = new Audio(backupUrl);
+          backupAudio.volume = 1.0;
+          activeAudio = backupAudio;
+          backupAudio.play().catch(() => {
+            if ('speechSynthesis' in window) {
+              try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(cleanWord);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.88;
+                utterance.volume = 1.0;
+                window.speechSynthesis.speak(utterance);
+              } catch(err) {}
+            }
+          });
+        });
+      }
+    }
+
+    function buildQuiz(shuffle = false) {
+      let pool = [...data];
+      if (shuffle) pool.sort(() => Math.random() - 0.5);
+
+      return pool.map((item) => {
+        const others = data.filter(d => d.jp !== item.jp).sort(() => Math.random() - 0.5).slice(0, 3);
+        const allOpts = [item, ...others].sort(() => Math.random() - 0.5).map(o => ({
+          text: o.jp,
+          correct: o.jp === item.jp
+        }));
+        return {
+          title: `Trong tiếng Nhật, "${item.vn}" được viết là gì?`,
+          correctStr: item.jp,
+          options: allOpts
+        };
+      });
+    }
+
+    function startQuiz(shuffle = false) {
+      questions = buildQuiz(shuffle);
+      curIdx = 0;
+      score = 0;
+      answered = false;
+
+      document.getElementById('quiz-card').classList.remove('hidden');
+      document.getElementById('result-box').classList.add('hidden');
+      showCurrent();
+    }
+
+    function showCurrent() {
+      answered = false;
+      const q = questions[curIdx];
+
+      document.getElementById('question-index').innerText = `Câu ${curIdx + 1} / ${questions.length}`;
+      document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+      document.getElementById('progress-fill').style.width = `${((curIdx + 1) / questions.length) * 100}%`;
+      document.getElementById('q-title').innerText = q.title;
+
+      const fBox = document.getElementById('feedback-alert');
+      fBox.className = 'hidden p-3.5 rounded-2xl text-sm font-semibold mb-3';
+      fBox.innerHTML = '';
+      document.getElementById('btn-continue').classList.add('hidden');
+
+      const grid = document.getElementById('answers-grid');
+      grid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((opt, i) => {
+        const card = document.createElement('div');
+        card.className = "w-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-slate-300 flex items-center justify-between transition cursor-pointer opt-card active:scale-[0.99]";
+        card.innerHTML = `
+          <div class="flex items-center flex-1">
+            <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-extrabold text-xs mr-3 shrink-0 letter-badge">${letters[i]}</span>
+            <span class="jp-font font-bold text-slate-800 text-lg">${opt.text}</span>
+          </div>
+          <span class="text-blue-500 hover:text-blue-600 p-1 rounded-xl speaker-icon text-lg" title="Bấm nghe phát âm chuẩn">🔊</span>
+        `;
+
+        card.onclick = () => {
+          playNativeAudio(opt.text);
+          if (!answered) {
+            handleAnswer(opt, card);
+          }
+        };
+
+        grid.appendChild(card);
+      });
+    }
+
+    function handleAnswer(selectedOpt, selectedCard) {
+      answered = true;
+      const q = questions[curIdx];
+      const allCards = document.querySelectorAll('.opt-card');
+      const fBox = document.getElementById('feedback-alert');
+
+      allCards.forEach((c, i) => {
+        const opt = q.options[i];
+        if (opt.correct) {
+          c.className = "w-full p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 flex items-center justify-between transition cursor-pointer opt-card";
+          const badge = c.querySelector('.letter-badge');
+          badge.className = "w-8 h-8 rounded-xl bg-emerald-200 text-emerald-900 flex items-center justify-center font-extrabold text-xs mr-3 shrink-0 letter-badge";
+        }
+      });
+
+      if (selectedOpt.correct) {
+        score++;
+        document.getElementById('score-counter').innerText = `Điểm: ${score}`;
+        fBox.className = 'block p-3.5 rounded-2xl text-sm font-semibold mb-3 bg-emerald-100 text-emerald-800';
+        fBox.innerHTML = `🎉 Chính xác! Bạn có thể chạm vào từng đáp án để nghe lại cách đọc chuẩn.`;
+      } else {
+        selectedCard.className = "w-full p-4 rounded-2xl border-2 border-rose-400 bg-rose-50 flex items-center justify-between transition cursor-pointer opt-card";
+        const badge = selectedCard.querySelector('.letter-badge');
+        badge.className = "w-8 h-8 rounded-xl bg-rose-200 text-rose-900 flex items-center justify-center font-extrabold text-xs mr-3 shrink-0 letter-badge";
+
+        fBox.className = 'block p-3.5 rounded-2xl text-sm font-semibold mb-3 bg-rose-100 text-rose-800';
+        fBox.innerHTML = `❌ Chưa chính xác! Đáp án đúng là: <b>${q.correctStr}</b> (Chạm vào từng ô để nghe lại)`;
+      }
+
+      document.getElementById('btn-continue').classList.remove('hidden');
+    }
+
+    document.getElementById('btn-continue').onclick = () => {
+      if (curIdx < questions.length - 1) {
+        curIdx++;
+        showCurrent();
+      } else {
+        document.getElementById('quiz-card').classList.add('hidden');
+        document.getElementById('result-box').classList.remove('hidden');
+        document.getElementById('res-score').innerText = `${score} / ${questions.length}`;
+        const pct = Math.round((score / questions.length) * 100);
+        document.getElementById('res-accuracy').innerText = `Độ chính xác: ${pct}%`;
+      }
+    };
+
+    window.onload = () => startQuiz(false);
+  </script>
+</body>
+</html>
